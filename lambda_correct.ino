@@ -86,7 +86,7 @@ void loop() {
   noInterrupts();
   petrol_injector_pulse = petrol_injector_pulseISR;
   // copy the pulse value to avoid it being changed by ISR
-  Interrupts();
+  interrupts();
   
   // Apply the closed loop lambda probe correction to the petrol injector pulse length
   // Calculate the current air-fuel ratio based on the lambda probe state

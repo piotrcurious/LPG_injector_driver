@@ -25,7 +25,9 @@ const uint16_t injector2_map[16] PROGMEM = { /* values mapping petrol injector p
 // Define the variables for the sensor readings and the corrections
 volatile uint32_t petrol_injector_rising_time; // microseconds
 volatile uint32_t petrol_injector_falling_time; // microseconds
-volatile uint16_t petrol_injector_pulse; // microseconds
+volatile uint16_t petrol_injector_pulseISR; // read in ISR, microseconds
+volatile uint16_t petrol_injector_pulse; // copy of. microseconds
+
 uint16_t gas_pressure; // arbitrary units
 uint16_t gas_temperature; // arbitrary units
 uint16_t lambda_probe_state; // arbitrary units
@@ -80,6 +82,11 @@ void loop() {
   gas_temperature = analogRead(GAS_TEMPERATURE);
   lambda_probe_state = analogRead(LAMBDA_PROBE);
   correction = analogRead(CORRECTION);
+
+  noInterrupts();
+  petrol_injector_pulse = petrol_injector_pulseISR;
+  // copy the pulse value to avoid it being changed by ISR
+  Interrupts();
   
   // Apply the closed loop lambda probe correction to the petrol injector pulse length
   // Calculate the current air-fuel ratio based on the lambda probe state
@@ -189,6 +196,6 @@ void petrol_injector_ISR() {
     petrol_injector_falling_time = micros();
     
     // Calculate the pulse length of the petrol injector signal in microseconds
-    petrol_injector_pulse = petrol_injector_falling_time - petrol_injector_rising_time;
+    petrol_injector_pulseISR = petrol_injector_falling_time - petrol_injector_rising_time;
   }
 }

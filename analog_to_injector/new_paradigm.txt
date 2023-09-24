@@ -6,6 +6,17 @@ both supplying LPG to the same cylinder.
 Adjustment for staged injection profile in this case
 is determined by modules pre injector driver, in analog domain.
 
+Analog "splitter" is easy to be implemented
+by f.e. esp32 
+reading full range analog signal 
+by using it's 12bit ADC 
+and then splitting it 
+into "LSB" and "MSB" part
+and then outputting those parts
+into DAC1 and DAC2 8bit output pins.
+
+remaining headroom can be used to determine offsets and overlaps of the split to adjust for unstable regions of injectors driven by this method. 
+
 Another approach would be to use separate mapping
 table to map analog input to injector opening times
 so in case of two uC's servicing same injector

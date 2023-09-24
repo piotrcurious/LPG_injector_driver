@@ -1,0 +1,16 @@
+This is an attempt to introduce new paradigm.
+Injectors work independently, being controlled by analog signal.
+Each uC controls separate injector.
+Injectors can overlap - there can be two uC's controlling two injectors 
+both supplying LPG to the same cylinder.
+Adjustment for staged injection profile in this case
+is determined by modules pre injector driver, in analog domain.
+
+Another approach would be to use separate mapping
+table to map analog input to injector opening times
+so in case of two uC's servicing same injector
+both uC's would contain different tables to compensate 
+for differences in injector profiles,
+f.e. for small fuel rates 0-10%, only injector 1 would
+operate in it's full range 
+Range 10-100% would be covered by second, bigger injector.
